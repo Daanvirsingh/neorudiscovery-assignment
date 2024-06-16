@@ -23,6 +23,16 @@ Make sure you have Node.js and npm installed on your machine. You can download t
 
 ```bash
 git clone https://github.com/Daanvirsingh/neorudiscovery-assignment.git
+```
+### Go to project and install
+
+```bash
 cd neorudiscovery-assignment
 npm install
+```
+
+### Run the Project
+
+```bash
+git clone https://github.com/Daanvirsingh/neorudiscovery-assignment.git
 npm start
