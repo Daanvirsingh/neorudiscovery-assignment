@@ -72,4 +72,4 @@ const TaskItem = ({ task, onClick, onEdit, onDelete }) => {
   );
 };
 
-export default TaskItem;
+export default React.memo(TaskItem);

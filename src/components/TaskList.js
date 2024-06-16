@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import {TaskContext} from '../context/TaskContext';
 import TaskItem from './TaskItem';
 import styled from 'styled-components';
@@ -43,15 +43,26 @@ const TaskList = ({ onSelectTask, onTaskEdit}) => {
         setSorting(key,direction)
     }
 
-    const handleEdit = task => {
-        setTaskToEdit(task)
-        onTaskEdit(task)
-    }
+    
+    const handleTaskSelect = useCallback((id) => {
+        onSelectTask(id);
+    }, [onSelectTask]);
 
-    const filteredTasks = tasks.filter(task =>
-        task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        task.description.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+    const handleEdit = useCallback((task) => {
+        setTaskToEdit(task);
+        onTaskEdit(task)
+    }, [setTaskToEdit]);
+
+    const handleDelete = useCallback((id) => {
+        deleteTask(id);
+    }, [deleteTask]);
+
+    const filteredTasks = useMemo(() => {
+        return tasks.filter(task =>
+          task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          task.description.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }, [tasks, searchQuery]);
   return (
     <TaskListContainer>
       <h2>Task List</h2>
@@ -64,8 +75,8 @@ const TaskList = ({ onSelectTask, onTaskEdit}) => {
       <SortButton onClick={() => handleSort('dueDate')}>Sort by Due Date {sortConfig.key === 'dueDate' ? sortConfig.direction === 'ascending' ? '▲' : '▼': ''}</SortButton>
       <SortButton onClick={() => handleSort('priority')}>Sort by Priority {sortConfig.key === 'priority' ? sortConfig.direction === 'ascending' ? '▲' : '▼': ''}</SortButton>
       {filteredTasks.map(task => (
-        <TaskItem key={task.id} task={task} onClick={() => onSelectTask(task)} onEdit={() => handleEdit(task)}
-        onDelete={() => deleteTask(task.id)}/>
+        <TaskItem key={task.id} task={task} onClick={() => handleTaskSelect(task)} onEdit={() => handleEdit(task)}
+        onDelete={() => handleDelete(task.id)}/>
       ))}
     </TaskListContainer>
   );
