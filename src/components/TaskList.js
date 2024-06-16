@@ -23,12 +23,16 @@ const SortButton = styled.button`
 `;
 
 const SearchInput = styled.input`
-  margin: 10px;
+  margin-bottom: 10px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   width: calc(100% - 40px);
 `;
+
+const FilterContainor = styled.div`
+    padding: 0px 10px;
+`
 
 const TaskList = ({ onSelectTask, onTaskEdit}) => {
   const { tasks, setSorting,sortConfig ,setTaskToEdit  ,deleteTask} = useContext(TaskContext);
@@ -65,6 +69,7 @@ const TaskList = ({ onSelectTask, onTaskEdit}) => {
       }, [tasks, searchQuery]);
   return (
     <TaskListContainer>
+        <FilterContainor>
       <h2>Task List</h2>
       <SearchInput
         type="text"
@@ -74,6 +79,7 @@ const TaskList = ({ onSelectTask, onTaskEdit}) => {
       />
       <SortButton onClick={() => handleSort('dueDate')}>Sort by Due Date {sortConfig.key === 'dueDate' ? sortConfig.direction === 'ascending' ? '▲' : '▼': ''}</SortButton>
       <SortButton onClick={() => handleSort('priority')}>Sort by Priority {sortConfig.key === 'priority' ? sortConfig.direction === 'ascending' ? '▲' : '▼': ''}</SortButton>
+      </FilterContainor>
       {filteredTasks.map(task => (
         <TaskItem key={task.id} task={task} onClick={() => handleTaskSelect(task)} onEdit={() => handleEdit(task)}
         onDelete={() => handleDelete(task.id)}/>
